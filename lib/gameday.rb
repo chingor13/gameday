@@ -7,4 +7,5 @@ module Gameday
   autoload :Player, "gameday/player"
   autoload :Pitch, "gameday/pitch"
   autoload :Team, "gameday/team"
+  autoload :Game, "gameday/game"
 end

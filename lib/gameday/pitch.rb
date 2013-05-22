@@ -2,6 +2,8 @@ module Gameday
   class Pitch
     include Tire::Model::Persistence
 
+    property :game_id
+
     property :pitcher
     property :batter
     property :result
@@ -36,13 +38,14 @@ module Gameday
     property :spin_dir
     property :spin_rate
 
-    def self.import(xml)
+    def self.import(xml, game = nil)
       doc = Nokogiri::XML(xml)
       doc.xpath("//atbat").each do |at_bat|
         at_bat.xpath("pitch").each do |pitch|
           self.from_doc(pitch).tap do |p|
             p.batter = at_bat["batter"]
             p.pitcher = at_bat["pitcher"]
+            p.game_id = game.id if game
           end.save
         end
       end

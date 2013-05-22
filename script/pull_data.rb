@@ -26,14 +26,19 @@ url = sprintf("http://gd2.mlb.com/components/game/mlb/year_%0d/month_%02d/day_%0
 
 doc = Nokogiri::HTML.parse(open(url))
 doc.xpath("//a").each do |link|
-  if link["href"].match(/^gid.*/)
-    game_url = File.join(url, link["href"], "inning/inning_all.xml")
-    players_url = File.join(url, link["href"], "players.xml")
+  if matches = link["href"].match(/^(gid.*)\/?/) 
+    game_id = matches[1]
+    Gameday::Game.import(options[:year], options[:month], options[:day], game_id)
 
-    puts "importing players: #{link["href"]}"
-    Gameday::Player.import(open(players_url))
-    puts "importing pitches: #{link["href"]}"
-    Gameday::Pitch.import(open(game_url))
+
+
+    # game_url = File.join(url, link["href"], "inning/inning_all.xml")
+    # players_url = File.join(url, link["href"], "players.xml")
+
+    # puts "importing players: #{link["href"]}"
+    # Gameday::Player.import(open(players_url))
+    # puts "importing pitches: #{link["href"]}"
+    # Gameday::Pitch.import(open(game_url))
   end
 end
 

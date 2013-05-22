@@ -23,6 +23,7 @@ module Gameday
 
     def self.from_doc(doc)
       new({
+        :id => doc["id"],
         :first => doc["first"],
         :last => doc["last"],
         :num => doc["num"],
