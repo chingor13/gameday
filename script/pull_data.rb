@@ -29,16 +29,6 @@ doc.xpath("//a").each do |link|
   if matches = link["href"].match(/^(gid.*)\/?/) 
     game_id = matches[1]
     Gameday::Game.import(options[:year], options[:month], options[:day], game_id)
-
-
-
-    # game_url = File.join(url, link["href"], "inning/inning_all.xml")
-    # players_url = File.join(url, link["href"], "players.xml")
-
-    # puts "importing players: #{link["href"]}"
-    # Gameday::Player.import(open(players_url))
-    # puts "importing pitches: #{link["href"]}"
-    # Gameday::Pitch.import(open(game_url))
   end
 end
 

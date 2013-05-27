@@ -13,7 +13,8 @@ module Gameday
       url = sprintf("http://gd2.mlb.com/components/game/mlb/year_%0d/month_%02d/day_%02d/%s", year, month, day, game_id)
       boxscore_url = File.join(url, "boxscore.xml")
       puts "importing game: #{boxscore_url}"
-      doc = Nokogiri::XML.parse(open(boxscore_url))
+      xml = open(boxscore_url)
+      doc = Nokogiri::XML.parse(xml)
       game = new({
         :year => year,
         :month => month,
@@ -31,6 +32,8 @@ module Gameday
       inning_url = File.join(url, "inning/inning_all.xml")
       puts "importing pitchers: #{inning_url}"
       Gameday::Pitch.import(open(inning_url), game)
+    rescue OpenURI::HTTPError => e
+      puts "error: #{e.message}"
     end
   end
 end
