@@ -8,29 +8,29 @@ module Gameday
     property :year
     property :month
     property :day
+    property :date, type: 'date'
 
-    def self.import(year, month, day, game_id)
-      url = sprintf("http://gd2.mlb.com/components/game/mlb/year_%0d/month_%02d/day_%02d/%s", year, month, day, game_id)
+    def self.import(date, game_id)
+      url = sprintf("http://gd2.mlb.com/components/game/mlb/year_%0d/month_%02d/day_%02d/%s", 
+        date.year, date.month, date.day, game_id)
       boxscore_url = File.join(url, "boxscore.xml")
-      puts "importing game: #{boxscore_url}"
+      puts "#{game_id}: importing game"
       xml = open(boxscore_url)
       doc = Nokogiri::XML.parse(xml)
       game = new({
-        :year => year,
-        :month => month,
-        :day => day,
-        :id => game_id,
-        :away_team => doc["away_team_code"],
-        :home_team => doc["home_team_code"]
+        date: date,
+        id: game_id,
+        away_team: doc["away_team_code"],
+        home_team: doc["home_team_code"]
       })
       game.save
 
       players_url = File.join(url, "players.xml")
-      puts "importing players: #{players_url}"
+      puts "#{game_id}: importing players"
       Gameday::Player.import(open(players_url))
 
       inning_url = File.join(url, "inning/inning_all.xml")
-      puts "importing pitchers: #{inning_url}"
+      puts "#{game_id}:"
       Gameday::Pitch.import(open(inning_url), game)
     rescue OpenURI::HTTPError => e
       puts "error: #{e.message}"

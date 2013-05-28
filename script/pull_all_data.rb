@@ -32,7 +32,7 @@ start_date = Date.parse(sprintf("%04d-%02d-%02d", options[:year], options[:month
   doc.xpath("//a").each do |link|
     if matches = link["href"].match(/^(gid.*)\//) 
       game_id = matches[1]
-      Gameday::Game.import(date.year, date.month, date.day, game_id) unless Gameday::Game.find(game_id)
+      Gameday::Game.import(date, game_id) unless Gameday::Game.find(game_id)
     end
   end
 end
