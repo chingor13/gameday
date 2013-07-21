@@ -12,8 +12,8 @@ module Gameday
     property :description
     property :x
     property :y
-    property :start_speed
-    property :end_speed
+    property :start_speed, type: "float"
+    property :end_speed, type: "float"
     property :sz_top
     property :sz_bot
     property :pfx_x
@@ -34,9 +34,9 @@ module Gameday
     property :break_length
     property :type_confidence
     property :zone
-    property :nasty
-    property :spin_dir
-    property :spin_rate
+    property :nasty, type: "integer"
+    property :spin_dir, type: "float"
+    property :spin_rate, type: "float"
 
     class << self
       def import(xml, game = nil)
@@ -61,8 +61,8 @@ module Gameday
           description:  doc["desc"],
           x:            doc["x"],
           y:            doc["y"],
-          start_speed:  doc["start_speed"],
-          end_speed:    doc["end_speed"],
+          start_speed:  doc["start_speed"].to_f,
+          end_speed:    doc["end_speed"].to_f,
           sz_top:       doc["sz_top"],
           sz_bot:       doc["sz_top"],
           pfx_x:        doc["pfx_x"],
@@ -83,7 +83,8 @@ module Gameday
           break_length: doc["break_length"],
           type_confidence: doc["type_confidence"],
           spin_dir:     doc["spin_dir"],
-          spin_rate:    doc["spin_rate"]
+          spin_rate:    doc["spin_rate"],
+          nasty:        doc["nasty"].to_i, 
         })
       end
     end

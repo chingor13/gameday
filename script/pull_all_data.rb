@@ -7,7 +7,8 @@ require 'pp'
 options = {
   :year => Date.today.year,
   :month => Date.today.month,
-  :day => Date.today.day
+  :day => Date.today.day,
+  :force => false
 }
 OptionParser.new do |opts|
   opts.banner = "Usage: #{File.basename(__FILE__)} [options]"
@@ -19,6 +20,9 @@ OptionParser.new do |opts|
   end
   opts.on "-d", "--day=DAY", OptionParser::DecimalInteger, "Starting day" do |day|
     options[:day] = day
+  end
+  opts.on "-f", "Force" do\
+    options[:force] = true
   end
 end.parse!
 
@@ -32,7 +36,7 @@ start_date = Date.parse(sprintf("%04d-%02d-%02d", options[:year], options[:month
   doc.xpath("//a").each do |link|
     if matches = link["href"].match(/^(gid.*)\//) 
       game_id = matches[1]
-      Gameday::Game.import(date, game_id) unless Gameday::Game.find(game_id)
+      Gameday::Game.import(date, game_id) unless !options[:force] && Gameday::Game.find(game_id)
     end
   end
 end

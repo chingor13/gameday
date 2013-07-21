@@ -8,4 +8,6 @@ module Gameday
   autoload :Pitch, "gameday/pitch"
   autoload :Team, "gameday/team"
   autoload :Game, "gameday/game"
+  autoload :DayScraper, "gameday/day_scraper"
+  autoload :RangeScraper, "gameday/range_scraper"
 end
