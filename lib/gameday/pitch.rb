@@ -37,17 +37,29 @@ module Gameday
     property :nasty, type: "integer"
     property :spin_dir, type: "float"
     property :spin_rate, type: "float"
+    property :count
+    property :batter_hand
 
     class << self
       def import(xml, game = nil)
         doc = Nokogiri::XML(xml)
         doc.xpath("//atbat").each do |at_bat|
+          balls = 0
+          strikes = 0
           at_bat.xpath("pitch").each do |pitch|
             self.from_doc(pitch).tap do |p|
+              p.count = "#{balls}-#{strikes}"
+              p.batter_hand = at_bat["stand"]
               p.batter = at_bat["batter"]
               p.pitcher = at_bat["pitcher"]
               p.game_id = game.id if game
             end.save
+            case pitch["type"]
+            when "B"
+              balls += 1
+            else
+              strikes = [2, strikes + 1].min
+            end
           end
         end
         true
