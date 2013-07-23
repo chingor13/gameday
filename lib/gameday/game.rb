@@ -37,6 +37,7 @@ module Gameday
         end
       rescue OpenURI::HTTPError => e
         puts "error: #{e.message}"  
+        pp e.backtrace
       rescue Timeout::Error
         puts "took too long"
       end

@@ -33,11 +33,13 @@ module Gameday
     property :break_length, type: "float"
     property :type_confidence, type: "float"
     property :zone, type: "integer"
+    property :pitch_zone, type: "integer"
     property :nasty, type: "integer"
     property :spin_dir, type: "float"
     property :spin_rate, type: "float"
     property :count, index: :not_analyzed
     property :batter_hand
+    property :swing, type: "boolean"
 
     class << self
       def import(xml, game = nil)
@@ -52,6 +54,8 @@ module Gameday
               p.batter = at_bat["batter"].to_i
               p.pitcher = at_bat["pitcher"].to_i
               p.game_id = game.id if game
+              p.swing = swing?(p.description)
+              p.pitch_zone = zone_for(p.px, p.pz, p.sz_bot, p.sz_top)
             end.save
             case pitch["type"]
             when "B"
@@ -75,7 +79,7 @@ module Gameday
           start_speed:  doc["start_speed"].to_f,
           end_speed:    doc["end_speed"].to_f,
           sz_top:       doc["sz_top"].to_f,
-          sz_bot:       doc["sz_top"].to_f,
+          sz_bot:       doc["sz_bot"].to_f,
           pfx_x:        doc["pfx_x"].to_f,
           pfx_z:        doc["pfx_z"].to_f,
           px:           doc["px"].to_f,
@@ -98,6 +102,24 @@ module Gameday
           nasty:        doc["nasty"].to_i, 
           zone:         doc["zone"].to_i
         })
+      end
+
+      # divide strike zone into 9 zones, with 16 zones on the outside
+      def zone_for(px, pz, sz_bot, sz_top)
+        # puts "calculating zone: #{px}, #{pz}, #{sz_bot}, #{sz_top}"
+        zone = [-0.70833, -0.23611, 0.23611, 0.70833, 100].index{|lower_bound| lower_bound > px} + 1
+        zone += 5 * [sz_top, (2*sz_top/3 + sz_bot/3), (2*sz_bot/3 + sz_top/3), sz_bot, -100].index{|bound| bound < pz}
+        # puts zone
+        return zone
+      end
+
+      def swing?(description)
+        if description.match("Ball") || description.match("Called") || description.match("Hit By Pitch") ||
+          description.match("Pitchout")
+          return false
+        else
+          return true
+        end
       end
     end
   end
