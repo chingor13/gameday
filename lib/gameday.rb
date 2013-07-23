@@ -13,7 +13,7 @@ module Gameday
   autoload :DayScraper, "gameday/day_scraper"
   autoload :RangeScraper, "gameday/range_scraper"
 
-  def self.open(url)
+  def self.open_url(url)
     open(url, "User-Agent" => USER_AGENT)
   end
 end

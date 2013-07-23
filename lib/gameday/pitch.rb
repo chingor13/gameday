@@ -4,11 +4,10 @@ module Gameday
 
     property :game_id
 
-    property :pitcher
-    property :batter
+    property :pitcher, type: "integer"
+    property :batter, type: "integer"
     property :result
     property :pitch_type
-    property :pitch_id
     property :description
     property :x, type: "float"
     property :y, type: "float"
@@ -33,7 +32,7 @@ module Gameday
     property :break_angle, type: "float"
     property :break_length, type: "float"
     property :type_confidence, type: "float"
-    property :zone
+    property :zone, type: "integer"
     property :nasty, type: "integer"
     property :spin_dir, type: "float"
     property :spin_rate, type: "float"
@@ -50,8 +49,8 @@ module Gameday
             self.from_doc(pitch).tap do |p|
               p.count = "#{balls}-#{strikes}"
               p.batter_hand = at_bat["stand"]
-              p.batter = at_bat["batter"]
-              p.pitcher = at_bat["pitcher"]
+              p.batter = at_bat["batter"].to_i
+              p.pitcher = at_bat["pitcher"].to_i
               p.game_id = game.id if game
             end.save
             case pitch["type"]
@@ -70,33 +69,34 @@ module Gameday
           id:           doc["sv_id"],
           result:       doc["type"],
           pitch_type:   doc["pitch_type"],
-          description:  doc["desc"],
-          x:            doc["x"],
-          y:            doc["y"],
+          description:  doc["des"],
+          x:            doc["x"].to_f,
+          y:            doc["y"].to_f,
           start_speed:  doc["start_speed"].to_f,
           end_speed:    doc["end_speed"].to_f,
-          sz_top:       doc["sz_top"],
-          sz_bot:       doc["sz_top"],
-          pfx_x:        doc["pfx_x"],
-          pfx_z:        doc["pfx_z"],
-          px:           doc["px"],
-          pz:           doc["pz"],
-          x0:           doc["x0"],
-          y0:           doc["y0"],
-          z0:           doc["z0"],
-          vx0:          doc["vx0"],
-          vy0:          doc["vy0"],
-          vz0:          doc["vz0"],
-          ax:           doc["ax"],
-          ay:           doc["ay"],
-          az:           doc["az"],
-          break_y:      doc["break_y"],
-          break_angle:  doc["break_angle"],
-          break_length: doc["break_length"],
-          type_confidence: doc["type_confidence"],
-          spin_dir:     doc["spin_dir"],
-          spin_rate:    doc["spin_rate"],
+          sz_top:       doc["sz_top"].to_f,
+          sz_bot:       doc["sz_top"].to_f,
+          pfx_x:        doc["pfx_x"].to_f,
+          pfx_z:        doc["pfx_z"].to_f,
+          px:           doc["px"].to_f,
+          pz:           doc["pz"].to_f,
+          x0:           doc["x0"].to_f,
+          y0:           doc["y0"].to_f,
+          z0:           doc["z0"].to_f,
+          vx0:          doc["vx0"].to_f,
+          vy0:          doc["vy0"].to_f,
+          vz0:          doc["vz0"].to_f,
+          ax:           doc["ax"].to_f,
+          ay:           doc["ay"].to_f,
+          az:           doc["az"].to_f,
+          break_y:      doc["break_y"].to_f,
+          break_angle:  doc["break_angle"].to_f,
+          break_length: doc["break_length"].to_f,
+          type_confidence: doc["type_confidence"].to_f,
+          spin_dir:     doc["spin_dir"].to_f,
+          spin_rate:    doc["spin_rate"].to_f,
           nasty:        doc["nasty"].to_i, 
+          zone:         doc["zone"].to_i
         })
       end
     end

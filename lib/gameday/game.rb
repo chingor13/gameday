@@ -12,12 +12,12 @@ module Gameday
 
     def self.import(date, game_id)
       begin
-        Timeout::timeout(75) do
+        Timeout::timeout(120) do
           url = sprintf("http://gd2.mlb.com/components/game/mlb/year_%0d/month_%02d/day_%02d/%s", 
             date.year, date.month, date.day, game_id)
           boxscore_url = File.join(url, "boxscore.xml")
           puts "#{game_id}: importing game"
-          xml = Gameday.open(boxscore_url)
+          xml = Gameday.open_url(boxscore_url)
           doc = Nokogiri::XML.parse(xml)
           game = new({
             date: date,
@@ -29,11 +29,11 @@ module Gameday
 
           players_url = File.join(url, "players.xml")
           puts "#{game_id}: importing players"
-          Gameday::Player.import(Gameday.open(players_url))
+          Gameday::Player.import(Gameday.open_url(players_url))
 
           inning_url = File.join(url, "inning/inning_all.xml")
           puts "#{game_id}: importing pitches #{inning_url}"
-          Gameday::Pitch.import(Gameday.open(inning_url), game)
+          Gameday::Pitch.import(Gameday.open_url(inning_url), game)
         end
       rescue OpenURI::HTTPError => e
         puts "error: #{e.message}"  
