@@ -7,6 +7,7 @@ module Gameday
     property :num
     property :team_id
     property :team_abbrev
+    property :position
 
     def self.import(xml)
       doc = Nokogiri::XML(xml)
@@ -28,7 +29,8 @@ module Gameday
         :last => doc["last"],
         :num => doc["num"],
         :team_id => doc["team_id"],
-        :team_abbrev => doc["team_abbrev"]
+        :team_abbrev => doc["team_abbrev"],
+        :position => doc["position"]
       })
     end
   end
