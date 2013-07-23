@@ -1,4 +1,3 @@
-require 'open-uri'
 module Gameday
   class Game
     include Tire::Model::Persistence
@@ -18,7 +17,7 @@ module Gameday
             date.year, date.month, date.day, game_id)
           boxscore_url = File.join(url, "boxscore.xml")
           puts "#{game_id}: importing game"
-          xml = open(boxscore_url)
+          xml = Gameday.open(boxscore_url)
           doc = Nokogiri::XML.parse(xml)
           game = new({
             date: date,
@@ -30,11 +29,11 @@ module Gameday
 
           players_url = File.join(url, "players.xml")
           puts "#{game_id}: importing players"
-          Gameday::Player.import(open(players_url))
+          Gameday::Player.import(Gameday.open(players_url))
 
           inning_url = File.join(url, "inning/inning_all.xml")
           puts "#{game_id}: importing pitches #{inning_url}"
-          Gameday::Pitch.import(open(inning_url), game)
+          Gameday::Pitch.import(Gameday.open(inning_url), game)
         end
       rescue OpenURI::HTTPError => e
         puts "error: #{e.message}"  
