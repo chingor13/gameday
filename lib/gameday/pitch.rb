@@ -10,34 +10,34 @@ module Gameday
     property :pitch_type
     property :pitch_id
     property :description
-    property :x
-    property :y
+    property :x, type: "float"
+    property :y, type: "float"
     property :start_speed, type: "float"
     property :end_speed, type: "float"
-    property :sz_top
-    property :sz_bot
-    property :pfx_x
-    property :pfx_z
-    property :px
-    property :pz
-    property :x0
-    property :y0
-    property :z0
-    property :vx0
-    property :vy0
-    property :vz0
-    property :ax
-    property :ay
-    property :az
-    property :break_y
-    property :break_angle
-    property :break_length
-    property :type_confidence
+    property :sz_top, type: "float"
+    property :sz_bot, type: "float"
+    property :pfx_x, type: "float"
+    property :pfx_z, type: "float"
+    property :px, type: "float"
+    property :pz, type: "float"
+    property :x0, type: "float"
+    property :y0, type: "float"
+    property :z0, type: "float"
+    property :vx0, type: "float"
+    property :vy0, type: "float"
+    property :vz0, type: "float"
+    property :ax, type: "float"
+    property :ay, type: "float"
+    property :az, type: "float"
+    property :break_y, type: "float"
+    property :break_angle, type: "float"
+    property :break_length, type: "float"
+    property :type_confidence, type: "float"
     property :zone
     property :nasty, type: "integer"
     property :spin_dir, type: "float"
     property :spin_rate, type: "float"
-    property :count
+    property :count, index: :not_analyzed
     property :batter_hand
 
     class << self

@@ -7,7 +7,7 @@ module Gameday
     def perform(start, finish = nil)
       start = Date.parse(start)
       finish = finish ? Date.parse(finish) : Date.today
-      (start...finish).each do |date|
+      (start..finish).each do |date|
         DayScraper.perform_async(date.year, date.month, date.day)
       end
     end
