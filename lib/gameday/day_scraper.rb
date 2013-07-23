@@ -16,6 +16,8 @@ module Gameday
           Gameday::Game.import(date, game_id)
         end
       end
+    rescue => e
+      puts "exception: #{e.message}"
     end
   end
 end
