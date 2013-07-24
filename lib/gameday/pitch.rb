@@ -39,6 +39,7 @@ module Gameday
     property :spin_rate, type: "float"
     property :count, index: :not_analyzed
     property :batter_hand
+    property :pitcher_hand
     property :swing, type: "boolean"
 
     class << self
@@ -51,6 +52,7 @@ module Gameday
             self.from_doc(pitch).tap do |p|
               p.count = "#{balls}-#{strikes}"
               p.batter_hand = at_bat["stand"]
+              p.pitcher_hand = at_bat["p_throws"]
               p.batter = at_bat["batter"].to_i
               p.pitcher = at_bat["pitcher"].to_i
               p.game_id = game.id if game
